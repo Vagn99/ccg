@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bufio"
 	"fmt"
 	"os"
 	"path/filepath"
@@ -8,6 +9,12 @@ import (
 )
 
 func processDirectory(path string, recursive bool) {
+	ignoreList, err := readIgnoreFile(path)
+	if err != nil {
+		fmt.Println("Error reading .ccgignore:", err)
+		// Optional: decide whether to continue or exit on this error
+	}
+
 	files, err := os.ReadDir(path)
 	if err != nil {
 		fmt.Println("Error reading directory:", err)
@@ -16,18 +23,16 @@ func processDirectory(path string, recursive bool) {
 
 	var result strings.Builder
 	for _, file := range files {
-		filePath := filepath.Join(path, file.Name())
-		if ignoreFile(file.Name()) {
+		if ignoreFile(file.Name(), ignoreList) {
 			continue
 		}
+		filePath := filepath.Join(path, file.Name())
 		if file.IsDir() {
 			if recursive {
 				processDirectory(filePath, recursive)
 			}
 		} else {
-			//Include filepath and name in the result and a divider line
-			result.WriteString(filePath)
-			result.WriteString(strings.Repeat("-", len(filePath)) + "\n")
+			result.WriteString(filePath + "\n" + strings.Repeat("-", len(filePath)) + "\n")
 			fileContents, err := os.ReadFile(filePath)
 			if err == nil {
 				result.WriteString(string(fileContents) + "\n")
@@ -35,18 +40,30 @@ func processDirectory(path string, recursive bool) {
 		}
 	}
 
-	// Print the result to context.txt
 	contextFilePath := filepath.Join(path, "context.txt")
 	err = os.WriteFile(contextFilePath, []byte(result.String()), 0644)
 	if err != nil {
 		fmt.Println("Error writing context file:", err)
 	}
-
 }
 
-func ignoreFile(fileName string) bool {
-	//List of excluded filenames
-	ignoreList := []string{"gcc", "context.txt"}
+func readIgnoreFile(path string) ([]string, error) {
+	ignoreFilePath := filepath.Join(path, ".ccgignore")
+	file, err := os.Open(ignoreFilePath)
+	if err != nil {
+		return nil, err
+	}
+	defer file.Close()
+
+	var lines []string
+	scanner := bufio.NewScanner(file)
+	for scanner.Scan() {
+		lines = append(lines, scanner.Text())
+	}
+	return lines, scanner.Err()
+}
+
+func ignoreFile(fileName string, ignoreList []string) bool {
 	for _, ignore := range ignoreList {
 		if fileName == ignore {
 			return true
