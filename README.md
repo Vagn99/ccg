@@ -39,10 +39,11 @@ ccg -r /path/to/directory
 
 
 ## Configuration
-Create a `.ccgignore` file in the root directory to exclude specific files and directories from processing. The format is the same as `.gitignore`, except that directories should not start with a slash.
+Create a `.ccgignore` file in the root directory to exclude specific files and directories from processing. The goal is to get a format similar to `.gitignore`. For now, however, the `.ccgignore` language is limited to file and directory names, each on a new line. Also, directories should not have a slash at the end.
 
 ```.gitignore
-# Example of contents in .ccgignore
+# Example of contents in .ccgignore. 
+# Note how directories are specified without a trailing slash.
 .ccgignore
 ccg
 context.txt
