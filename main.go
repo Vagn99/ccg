@@ -4,6 +4,8 @@ import (
 	"flag"
 	"fmt"
 	"os"
+	"path/filepath"
+	"strings"
 )
 
 func main() {
@@ -17,14 +19,13 @@ func main() {
 	}
 
 	rootPath := args[0]
+	var result strings.Builder
+	processDirectory(rootPath, *recursive, &result)
 
-	if *recursive {
-		fmt.Println("Recursive")
-	} else {
-		fmt.Println("Not recursive")
+	// Write the final result to context.txt in the root directory
+	contextFilePath := filepath.Join(rootPath, "context.txt")
+	err := os.WriteFile(contextFilePath, []byte(result.String()), 0644)
+	if err != nil {
+		fmt.Println("Error writing context file:", err)
 	}
-
-	fmt.Println("Path:", rootPath)
-
-	processDirectory(rootPath, *recursive)
 }

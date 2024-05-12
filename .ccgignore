@@ -1,3 +1,8 @@
-
 .ccgignore
 ccg
+context.txt
+.git
+.idea
+.gitignore
+README.md
+.DS_Store
