@@ -1,8 +1,10 @@
+# One file/directory per line 
 .ccgignore
-ccg
 context.txt
+ccg
 .git
 .idea
 .gitignore
-README.md
-.DS_Store
+.DS_Stores
+node_modules
+.next

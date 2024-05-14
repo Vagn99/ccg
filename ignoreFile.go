@@ -39,3 +39,22 @@ func ignoreFile(fileName string, ignoreList []string) bool {
 	}
 	return false
 }
+
+func initIgnoreFile() error {
+	//Create .ccgignore file with some default values
+	ignoreFilePath := ".ccgignore"
+	file, err := os.Create(ignoreFilePath)
+	if err != nil {
+		return err
+	}
+
+	defer file.Close()
+
+	_, err = file.WriteString("# One file/directory per line \n.ccgignore\ncontext.txt\nccg\n.git\n.idea\n.gitignore\n.DS_Stores\nnode_modules\n.next\n")
+	if err != nil {
+		return err
+	}
+
+	return nil
+
+}

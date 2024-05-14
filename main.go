@@ -18,6 +18,17 @@ func main() {
 		os.Exit(1)
 	}
 
+	if args[0] == "init" {
+		//Initialize .ccgignore file with some default values
+		err := initIgnoreFile()
+		if err != nil {
+			fmt.Println("Error initializing ignore file:", err)
+			return
+		}
+		println("Initialized .ccgignore file with default values")
+		return
+	}
+
 	rootPath := args[0]
 	var result strings.Builder
 	processDirectory(rootPath, *recursive, &result)
