@@ -50,7 +50,7 @@ func initIgnoreFile() error {
 
 	defer file.Close()
 
-	_, err = file.WriteString("# One file/directory per line \n.ccgignore\ncontext.txt\nccg\n.git\n.idea\n.gitignore\n.DS_Stores\nnode_modules\n.next\n")
+	_, err = file.WriteString("# One file/directory per line \n.ccgignore\ncontext.txt\nccg\n.git\n.idea\n.gitignore\n.DS_Store\nnode_modules\n.next\n")
 	if err != nil {
 		return err
 	}
