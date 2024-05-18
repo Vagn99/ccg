@@ -5,6 +5,10 @@ ccg
 .git
 .idea
 .gitignore
-.DS_Stores
+.DS_Store
 node_modules
 .next
+GG.txt
+LICENSE
+go.mod
+README.md
